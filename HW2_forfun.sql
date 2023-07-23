@@ -88,16 +88,14 @@ SET publication_year = YEAR(CURRENT_DATE())
 WHERE id = 4;
 
 -- Запит, який видаляє книгу з найдовшою назвою;
-CREATE TEMPORARY TABLE temp_longest_title
-SELECT title 
-FROM books 
-ORDER BY LENGTH(title) 
-DESC LIMIT 1;
-
-DELETE FROM books 
-WHERE title = (SELECT title FROM temp_longest_title);
-
-DROP TABLE temp_longest_title;
+DELETE b1
+FROM books b1
+JOIN (
+    SELECT title
+    FROM books
+    ORDER BY LENGTH(title) DESC
+    LIMIT 1
+) b2 ON b1.title = b2.title;
 
 -- Напишіть запит, щоб дізнатися, чи є книги, написані більш ніж одним автором (за ідентифікатором).
 SELECT title
